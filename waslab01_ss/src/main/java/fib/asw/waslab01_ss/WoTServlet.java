@@ -37,8 +37,15 @@ public class WoTServlet extends HttpServlet {
     	
         String autor = request.getParameter("author");
         String text = request.getParameter("tweet_text");
+        
+        response.setContentType ("text/plain");
+        
+        
         try {
-        		tweetDAO.insertTweet(autor, text);	
+        		long id = tweetDAO.insertTweet(autor, text);
+        		PrintWriter out = response.getWriter();
+        		out.print(id);
+        		
         }
         catch (Exception e) {
         	PrintWriter out = response.getWriter();
@@ -46,8 +53,10 @@ public class WoTServlet extends HttpServlet {
         }
         
         	
-
-        response.sendRedirect(request.getContextPath());
+        if (!request.getHeader("Accept").equals("text/plain")) {
+        	response.sendRedirect(request.getContextPath());
+        }
+    
     }
 
     private void printHTMLresults (HttpServletResponse response, List<Tweet> tweets) throws IOException {
@@ -96,7 +105,8 @@ public class WoTServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         
         for (Tweet tweet: tweets) {
-        	out.println("tweet #" + tweet.getTwid() + ": " + tweet.getAuthor()+ ": " + tweet.getText() + ". " + tweet.getCreated_at());
+        	out.print("tweet #" + tweet.getTwid() + ": " 
+        			+ tweet.getAuthor()+ ": " + tweet.getText() + ". [" + tweet.getCreated_at() + "]");
         }
     }
 }

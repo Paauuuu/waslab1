@@ -34,8 +34,18 @@ public class WoTServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        // This method does NOTHING but redirect to the main page
+    	
+        String autor = request.getParameter("author");
+        String text = request.getParameter("tweet_text");
+        try {
+        		tweetDAO.insertTweet(autor, text);	
+        }
+        catch (Exception e) {
+        	PrintWriter out = response.getWriter();
+        	out.println("Raised exception of type" + e);
+        }
+        
+        	
 
         response.sendRedirect(request.getContextPath());
     }

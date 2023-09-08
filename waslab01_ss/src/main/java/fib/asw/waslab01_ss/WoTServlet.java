@@ -22,9 +22,14 @@ public class WoTServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    	
         List<Tweet> tweets = tweetDAO.getAllTweets();
-
-        printHTMLresults(response, tweets);
+        if (request.getHeader("Accept").equals("text/plain")) {
+    		printPLAINresult(response, tweets);
+    	}
+        else {
+        	printHTMLresults(response, tweets);
+        }
 
     }
 
@@ -71,5 +76,17 @@ public class WoTServlet extends HttpServlet {
             out.println("</div>");
         }
         out.println ( "</body></html>" );
+    }
+    
+    private void printPLAINresult(HttpServletResponse response, List<Tweet> tweets) throws IOException{
+
+        response.setContentType ("text/html");
+        response.setCharacterEncoding(ENCODING);
+        
+        PrintWriter out = response.getWriter();
+        
+        for (Tweet tweet: tweets) {
+        	out.println("tweet #" + tweet.getTwid() + ": " + tweet.getAuthor()+ ": " + tweet.getText() + ". " + tweet.getCreated_at());
+        }
     }
 }

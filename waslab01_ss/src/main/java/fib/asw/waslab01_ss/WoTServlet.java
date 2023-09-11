@@ -1,6 +1,8 @@
 package fib.asw.waslab01_ss;
 
 import java.io.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -45,6 +47,8 @@ public class WoTServlet extends HttpServlet {
         		long id = tweetDAO.insertTweet(autor, text);
         		PrintWriter out = response.getWriter();
         		out.print(id);
+        		Cookie cookie = new Cookie("miCookie", hashString(Long.toString(id), "md5"));
+        		response.addCookie(cookie);
         		
         }
         catch (Exception e) {
@@ -109,4 +113,26 @@ public class WoTServlet extends HttpServlet {
         			+ tweet.getAuthor()+ ": " + tweet.getText() + ". [" + tweet.getCreated_at() + "]");
         }
     }
+    
+    private String hashString(String input, String algorithm) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance(algorithm);
+            byte[] hashBytes = digest.digest(input.getBytes());
+            
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                String hex = Integer.toHexString(0xFF & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
 }

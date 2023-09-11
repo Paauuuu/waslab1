@@ -39,16 +39,32 @@ public class WoTServlet extends HttpServlet {
     	
         String autor = request.getParameter("author");
         String text = request.getParameter("tweet_text");
+        String idDelete = request.getParameter("idDelete");
+        
         
         response.setContentType ("text/plain");
         
         
         try {
+        	
+        	
+        	
+        	if(idDelete == null) {
         		long id = tweetDAO.insertTweet(autor, text);
         		PrintWriter out = response.getWriter();
         		out.print(id);
-        		Cookie cookie = new Cookie("miCookie", hashString(Long.toString(id), "md5"));
+        		Cookie cookie = new Cookie("miCookie" + String.valueOf(id), hashString(Long.toString(id), "md5"));
         		response.addCookie(cookie);
+        	}
+        	
+        	else {
+        		Cookie[] cookies = request.getCookies();
+        		for(Cookie cookie : cookies) {
+        			if(cookie.getValue().equals(hashString(idDelete, "md5"))) {
+        				tweetDAO.deleteTweet(Integer.parseInt(idDelete));
+        			}
+        		}
+        	}
         		
         }
         catch (Exception e) {

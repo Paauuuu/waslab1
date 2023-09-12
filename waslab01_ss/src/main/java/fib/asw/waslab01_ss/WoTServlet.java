@@ -112,6 +112,13 @@ public class WoTServlet extends HttpServlet {
             out.println("<div class=\"wallitem\">");
             out.println("<h4><em>" + tweet.getAuthor() + "</em> @ "+ timeFormatter.format(tweet.getCreated_at()) +"</h4>");
             out.println("<p>" + tweet.getText() + "</p>");
+            
+            out.println("<form action=\"wot\" method=\"post\">");
+			out.println("<table border=0 cellpadding=2>");
+			out.println("<input type=\"submit\" name=\"action\" value=\"Delete tweet\">");
+			out.println("<tr><td><input type=\"hidden\" name=\"twid\" value=" + tweet.getTwid() + "></td></tr>");
+			out.println("</table></form>");
+            
             out.println("</div>");
         }
         out.println ( "</body></html>" );

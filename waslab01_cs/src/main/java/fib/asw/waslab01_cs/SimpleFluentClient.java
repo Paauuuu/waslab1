@@ -19,6 +19,9 @@ public class SimpleFluentClient {
   	System.out.println(Request.get(URI).addHeader("Accept", "text/plain").execute().returnContent());
   	
   	/* Insert code for Task #5 here */
+  	
+  	System.out.println(String.format("El tweet #%s ha sigut esborrat", Integer.parseInt(id)-1));
+  	
   	System.out.println(Request.post(URI).bodyForm(Form.form().add("action",  "delete").add("idDelete", id).build())
   	.addHeader("Accept", "text/plain").execute().returnContent());
   	

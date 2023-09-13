@@ -60,6 +60,9 @@ public class WoTServlet extends HttpServlet {
         	else {
         		Cookie[] cookies = request.getCookies();
         		for(Cookie cookie : cookies) {
+        			PrintWriter out = response.getWriter();
+        			out.println(cookie.getValue());
+        			out.println(hashString(idDelete, "md5"));
         			if(cookie.getValue().equals(hashString(idDelete, "md5"))) {
         				tweetDAO.deleteTweet(Integer.parseInt(idDelete));
         			}
@@ -67,7 +70,7 @@ public class WoTServlet extends HttpServlet {
         	}
         		
         }
-        catch (Exception e) {
+        catch (Exception e) {	
         	PrintWriter out = response.getWriter();
         	out.println("Raised exception of type" + e);
         }
@@ -113,11 +116,10 @@ public class WoTServlet extends HttpServlet {
             out.println("<h4><em>" + tweet.getAuthor() + "</em> @ "+ timeFormatter.format(tweet.getCreated_at()) +"</h4>");
             out.println("<p>" + tweet.getText() + "</p>");
             
-            out.println("<form action=\"wot\" method=\"post\">");
-			out.println("<table border=0 cellpadding=2>");
-			out.println("<input type=\"submit\" name=\"action\" value=\"Delete tweet\">");
-			out.println("<tr><td><input type=\"hidden\" name=\"twid\" value=" + tweet.getTwid() + "></td></tr>");
-			out.println("</table></form>");
+            out.println("<method=\"post\">");
+			out.println("<input name=\"method\" value=\"DELETE\" hidden />");
+			out.println("<input name =\"idDelete\" value =\""+tweet.getTwid()+"\" hidden />");
+			out.println("<input type=\"submit\" value=\"Delete\" /></form>\r\n");
             
             out.println("</div>");
         }

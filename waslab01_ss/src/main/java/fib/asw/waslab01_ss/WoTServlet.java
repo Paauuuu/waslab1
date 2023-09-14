@@ -64,7 +64,9 @@ public class WoTServlet extends HttpServlet {
         			out.println(cookie.getValue());
         			out.println(hashString(idDelete, "md5"));
         			if(cookie.getValue().equals(hashString(idDelete, "md5"))) {
-        				tweetDAO.deleteTweet(Integer.parseInt(idDelete));
+        				Boolean result = tweetDAO.deleteTweet(Integer.parseInt(idDelete));
+        				out.println(String.valueOf(result));
+        				//S'envia el delete pero el tweet no s'esborra i no sé veure perquè
         			}
         		}
         	}
@@ -119,7 +121,7 @@ public class WoTServlet extends HttpServlet {
             out.println("<method=\"post\">");
 			out.println("<input name=\"method\" value=\"DELETE\" hidden />");
 			out.println("<input name =\"idDelete\" value =\""+tweet.getTwid()+"\" hidden />");
-			out.println("<input type=\"submit\" value=\"Delete\" /></form>\r\n");
+			out.println("<input type=\"submit\" value=\"delete\" /></form>\r\n");
             
             out.println("</div>");
         }
